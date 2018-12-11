@@ -1,0 +1,61 @@
+//本系统从12引脚接收二进制数据，从13引脚输出二进制数据，接收到的数据通过一个发光二极管（连11引脚）和一个光电二极管（连A0引脚）进行传输
+#define ADpin A0
+#define led 11
+#define in 12
+#define out 13
+#define T 50 
+bool start=false;
+
+void setup()
+{
+   pinMode(led,OUTPUT);
+   pinMode(in,INPUT);
+   pinMode(out, OUTPUT);
+   digitalWrite(led,LOW);
+   Serial.begin(9600);
+}
+
+void loop()
+{
+  int a=digitalRead(in);
+  
+  if(a==1)
+  {
+    start=true;
+  }
+  if(start==true)
+  {
+  
+ 
+  unsigned long t1=millis();
+  Serial.println(t1);
+  digitalWrite(led,LOW);
+  while(analogRead(ADpin)>20)
+  {
+    ;
+  }
+
+  if(a==1)
+  {
+    digitalWrite(led,HIGH);
+  }
+  if(a==0)
+  {
+    digitalWrite(led,LOW);
+  }
+  
+
+  if(analogRead(ADpin)>40)
+  {
+    digitalWrite(out,HIGH);
+  }
+   if(analogRead(ADpin)<40)
+  {
+    digitalWrite(out,LOW);
+  }
+  unsigned long t2=millis();
+  Serial.println(t2);
+  Serial.println(T-t2+t1);  
+  delay(T-t2+t1);
+  }
+}
